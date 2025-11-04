@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Viewer — Projeto Finlândia</title>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <style>
+    :root{--bg:#0b1220;--panel:#0d1630;--card:#101a39;--text:#e6ecff;--muted:#9fb0d6;--ring:#5b8cff}
+    html,body{height:100%}
+    body{margin:0;background:radial-gradient(1200px 700px at 20% -10%, #1b2a6b33, transparent),radial-gradient(900px 600px at 110% 10%, #6b21a833, transparent),var(--bg);color:var(--text);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;line-height:1.6}
+    header{position:sticky;top:0;z-index:10;background:linear-gradient(180deg, rgba(11,18,32,.9), rgba(11,18,32,.6));backdrop-filter:blur(8px);border-bottom:1px solid #203058}
+    header .row{display:flex;gap:12px;align-items:center;max-width:1200px;margin:0 auto;padding:12px 20px}
+    .brand{font-weight:600}
+    .search{margin-left:auto}
+    .search input{background:#0e1836;border:1px solid #203058;color:#dfe6ff;border-radius:10px;padding:8px 10px;min-width:240px}
+    .layout{display:grid;grid-template-columns:280px 1fr;gap:18px;max-width:1200px;margin:0 auto;padding:20px}
+    .sidebar{background:linear-gradient(180deg,#0d1630,#0b1220);border:1px solid #203058;border-radius:16px;padding:14px;max-height:calc(100vh - 90px);position:sticky;top:78px;overflow:auto}
+    .group{margin-bottom:16px}
+    .group-title{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin:6px 0}
+    .link{display:block;color:#cfe1ff;text-decoration:none;padding:6px 8px;border-radius:8px}
+    .link:hover{background:#ffffff0f}
+    .active{outline:2px solid #3a57a6}
+    .content{background:linear-gradient(180deg,#0d1630,#0b1220);border:1px solid #203058;border-radius:16px;overflow:hidden}
+    .crumbs{padding:10px 16px;border-bottom:1px solid #203058;color:#b8c6ef;font-size:12px}
+    .prose{padding:20px}
+    .prose h1{font-size:1.6rem;margin:0 0 10px}
+    .prose h2{font-size:1.25rem;margin-top:22px}
+    .prose pre{background:#0e1836;border:1px solid #1f2d62;padding:12px;border-radius:10px;overflow:auto}
+    .muted{color:var(--muted)}
+    @media(max-width:900px){.layout{grid-template-columns:1fr}.sidebar{position:relative;top:auto;max-height:none}}
+  </style>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <header>
+    <div class="row">
+      <div class="brand">Projeto Finlândia / Finland Project</div>
+      <div class="search"><input id="q" type="search" placeholder="Search / Buscar" /></div>
+    </div>
+  </header>
+  <div class="layout">
+    <aside class="sidebar" id="sidebar"></aside>
+    <div class="content">
+      <div class="crumbs" id="crumbs">Projeto Finlândia</div>
+      <div class="prose" id="content">Loading…</div>
+    </div>
+  </div>
+  <script>
+    const map = [
+      { titlePt:'Introdução', titleEn:'Introduction', children:[
+        {titlePt:'Visão Geral',titleEn:'Overview',file:'00_INTRODUCTION/overview.md'},
+        {titlePt:'Como Usar',titleEn:'How to Use',file:'00_INTRODUCTION/how_to_use_this_training.md'},
+        {titlePt:'Trilha',titleEn:'Learning Path',file:'00_INTRODUCTION/learning_path.md'}
+      ]},
+      { titlePt:'Idioma', titleEn:'Language', children:[
+        {titlePt:'Semana 1',titleEn:'Week 1',file:'01_LANGUAGE/activities/week1_language_challenge.md'},
+        {titlePt:'Semana 2',titleEn:'Week 2',file:'01_LANGUAGE/activities/week2_translation_practice.md'},
+        {titlePt:'Semana 3',titleEn:'Week 3',file:'01_LANGUAGE/activities/week3_module.md'},
+        {titlePt:'Semana 4',titleEn:'Week 4',file:'01_LANGUAGE/activities/week4_module.md'},
+        {titlePt:'Semana 5',titleEn:'Week 5',file:'01_LANGUAGE/activities/week5_module.md'},
+        {titlePt:'Semana 6',titleEn:'Week 6',file:'01_LANGUAGE/activities/week6_module.md'},
+        {titlePt:'Semana 7',titleEn:'Week 7',file:'01_LANGUAGE/activities/week7_module.md'},
+        {titlePt:'Semana 8',titleEn:'Week 8',file:'01_LANGUAGE/activities/week8_module.md'},
+        {titlePt:'Semana 9',titleEn:'Week 9',file:'01_LANGUAGE/activities/week9_module.md'},
+        {titlePt:'Semana 10',titleEn:'Week 10',file:'01_LANGUAGE/activities/week10_module.md'},
+        {titlePt:'Semana 11',titleEn:'Week 11',file:'01_LANGUAGE/activities/week11_module.md'},
+        {titlePt:'Semana 12',titleEn:'Week 12',file:'01_LANGUAGE/activities/week12_module.md'},
+        {titlePt:'Vocabulário',titleEn:'Vocabulary (CSV)',file:'01_LANGUAGE/finnish_vocabulary.csv'}
+      ]},
+      { titlePt:'Carreira', titleEn:'Career', children:[
+        {titlePt:'Candidatura',titleEn:'Application',file:'02_CAREER_FINLAND/activities/job_application_exercise.md'},
+        {titlePt:'Entrevista',titleEn:'Interview',file:'02_CAREER_FINLAND/activities/mock_interview_script.md'},
+        {titlePt:'LinkedIn',titleEn:'LinkedIn',file:'02_CAREER_FINLAND/activities/linkedin_update_task.md'},
+        {titlePt:'Networking',titleEn:'Networking',file:'02_CAREER_FINLAND/activities/networking_outreach_task.md'},
+        {titlePt:'Pesquisa Salarial',titleEn:'Salary Research',file:'02_CAREER_FINLAND/activities/salary_research_task.md'},
+        {titlePt:'Oficina CV',titleEn:'CV Workshop',file:'02_CAREER_FINLAND/activities/finnish_cv_workshop.md'}
+      ]},
+      { titlePt:'Projetos', titleEn:'Projects', children:[
+        {titlePt:'Weekly Report',titleEn:'Weekly Report',file:'05_PROJECTS/templates/weekly_report.md'},
+        {titlePt:'Project Template',titleEn:'Project Template',file:'05_PROJECTS/templates/project_template.md'},
+        {titlePt:'Reflection Log',titleEn:'Reflection Log',file:'05_PROJECTS/templates/reflection_log.md'}
+      ]}
+    ];
+
+    function qs(k){return new URLSearchParams(location.search).get(k)}
+    const file = qs('file') || '00_INTRODUCTION/overview.md';
+
+    function buildSidebar(){
+      const sb=document.getElementById('sidebar'); sb.innerHTML='';
+      map.forEach(g=>{
+        const div=document.createElement('div'); div.className='group';
+        const h=document.createElement('div'); h.className='group-title'; h.textContent=`${g.titlePt} / ${g.titleEn}`; div.appendChild(h);
+        const ul=document.createElement('ul');
+        g.children.forEach(item=>{
+          const li=document.createElement('li'); const a=document.createElement('a');
+          a.className='link'; a.href=`viewer.html?file=${encodeURIComponent(item.file)}`;
+          a.textContent=`${item.titlePt} / ${item.titleEn}`;
+          if(item.file===file){ a.classList.add('active'); }
+          li.appendChild(a); ul.appendChild(li);
+        });
+        div.appendChild(ul); sb.appendChild(div);
+      });
+    }
+
+    function buildBreadcrumbs(){
+      const c=document.getElementById('crumbs');
+      let foundGroup=map.find(g=>g.children.some(ch=>ch.file===file));
+      let foundItem=foundGroup?.children.find(ch=>ch.file===file);
+      const parts=['Projeto Finlândia', foundGroup?foundGroup.titlePt:'', foundItem?foundItem.titlePt:''].filter(Boolean);
+      c.textContent=parts.join(' › ');
+    }
+
+    async function load(){
+      buildSidebar(); buildBreadcrumbs();
+      const content=document.getElementById('content');
+      const isCsv=file.endsWith('.csv');
+      try{
+        const res=await fetch(file,{cache:'no-store'});
+        if(!res.ok) throw new Error('Failed to load '+file);
+        const txt=await res.text();
+        if(isCsv){
+          content.innerHTML = `<h1>Vocabulário / Vocabulary (CSV)</h1><pre>${txt.replace(/[&<>]/g,s=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[s]))}</pre>`;
+        } else {
+          const html=marked.parse(txt);
+          content.innerHTML=html;
+        }
+      }catch(e){ content.innerHTML = `<p class="muted">Erro ao abrir o arquivo / Error: ${e.message}</p>`; }
+    }
+
+    document.getElementById('q').addEventListener('input', (e)=>{
+      const q=e.target.value.toLowerCase();
+      const links=[...document.querySelectorAll('.link')];
+      links.forEach(a=>{ a.style.display = a.textContent.toLowerCase().includes(q) ? '' : 'none'; });
+    });
+
+    load();
+  </script>
+</body>
+</html>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Viewer — Projeto Finlândia</title>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <style>
+    :root{--bg:#0b1220;--panel:#0d1630;--card:#111a3b;--text:#e6ecff;--muted:#98a2b3;--accent:#7dd3fc;--accent2:#a78bfa}
+    html,body{height:100%}
+    body{margin:0;background:radial-gradient(1200px 700px at 20% -10%, #1b2a6b33, transparent),radial-gradient(900px 600px at 110% 10%, #6b21a833, transparent),var(--bg);color:var(--text);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;line-height:1.6}
+    header{position:sticky;top:0;background:linear-gradient(180deg, rgba(11,18,32,.95), rgba(11,18,32,.75));backdrop-filter:blur(8px);border-bottom:1px solid #203058;padding:12px 16px;z-index:10}
+    header .row{display:flex;gap:12px;align-items:center;max-width:1100px;margin:0 auto}
+    .badge{font-size:12px;color:#0b1220;background:linear-gradient(90deg, var(--accent), var(--accent2));padding:2px 8px;border-radius:999px}
+    .path{color:var(--muted);font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .container{max-width:1100px;margin:24px auto;padding:0 16px}
+    .panel{background:linear-gradient(180deg, #0d1630, #0b1220);border:1px solid #203058;border-radius:16px;box-shadow:0 10px 30px rgba(0,0,0,.35)}
+    .content{padding:24px}
+    .content h1,.content h2,.content h3{line-height:1.3}
+    .content h1{font-size:1.7rem;margin:0 0 12px}
+    .content h2{font-size:1.3rem;margin-top:22px}
+    .content h3{font-size:1.15rem;margin-top:18px}
+    .content a{color:#8ec5ff}
+    .content pre{background:#0e1836;border:1px solid #1f2d62;padding:12px;border-radius:10px;overflow:auto}
+    .content code{background:#0e1836;padding:.15rem .35rem;border-radius:.4rem}
+    .toolbar{display:flex;gap:8px;justify-content:space-between;align-items:center;padding:12px 16px;border-bottom:1px solid #203058}
+    .toolbar .left{display:flex;gap:8px;align-items:center}
+    .btn{background:#0f1b3c;border:1px solid #27407f;color:#cfe1ff;padding:8px 12px;border-radius:10px;cursor:pointer}
+    .btn:hover{border-color:#3c5db2}
+    .hint{color:#9fb0d6;font-size:12px}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="row">
+      <span class="badge">Premium</span>
+      <div class="path" id="path">Loading…</div>
+    </div>
+  </header>
+  <div class="container">
+    <div class="panel">
+      <div class="toolbar">
+        <div class="left">
+          <button class="btn" onclick="goHome()">Home</button>
+          <button class="btn" onclick="openRaw()">Open raw</button>
+        </div>
+        <div class="hint">PT/EN — use este visualizador para qualquer .md</div>
+      </div>
+      <div class="content" id="content">Carregando… / Loading…</div>
+    </div>
+  </div>
+  <script>
+    function qs(k){return new URLSearchParams(location.search).get(k)}
+    const file = qs(file) || 00_INTRODUCTION/overview.md;
+    document.getElementById(path).textContent = `Viewing: ${file}`;
+    function goHome(){ location.href = index.html; }
+    function openRaw(){ window.open(file, _blank); }
+    async function load(){
+      try{
+        const res = await fetch(file, {cache:no-store});
+        if(!res.ok){ throw new Error(Failed
