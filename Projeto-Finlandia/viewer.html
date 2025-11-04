@@ -48,6 +48,7 @@
     </div>
   </div>
   <script>
+    const ROOT = '/Projeto-Finlandia/';
     const map = [
       { titlePt:'Introdução', titleEn:'Introduction', children:[
         {titlePt:'Visão Geral',titleEn:'Overview',file:'00_INTRODUCTION/overview.md'},
@@ -85,7 +86,8 @@
     ];
 
     function qs(k){return new URLSearchParams(location.search).get(k)}
-    const file = qs('file') || '00_INTRODUCTION/overview.md';
+    const fileParam = qs('file') || '00_INTRODUCTION/overview.md';
+    const file = fileParam.startsWith('/') ? fileParam : ROOT + fileParam;
 
     function buildSidebar(){
       const sb=document.getElementById('sidebar'); sb.innerHTML='';
@@ -95,9 +97,9 @@
         const ul=document.createElement('ul');
         g.children.forEach(item=>{
           const li=document.createElement('li'); const a=document.createElement('a');
-          a.className='link'; a.href=`viewer.html?file=${encodeURIComponent(item.file)}`;
+          a.className='link'; a.href=`${ROOT}viewer.html?file=${encodeURIComponent(item.file)}`;
           a.textContent=`${item.titlePt} / ${item.titleEn}`;
-          if(item.file===file){ a.classList.add('active'); }
+          if((ROOT+item.file)===file){ a.classList.add('active'); }
           li.appendChild(a); ul.appendChild(li);
         });
         div.appendChild(ul); sb.appendChild(div);
@@ -106,8 +108,8 @@
 
     function buildBreadcrumbs(){
       const c=document.getElementById('crumbs');
-      let foundGroup=map.find(g=>g.children.some(ch=>ch.file===file));
-      let foundItem=foundGroup?.children.find(ch=>ch.file===file);
+      let foundGroup=map.find(g=>g.children.some(ch=> (ROOT+ch.file)===file));
+      let foundItem=foundGroup?.children.find(ch=> (ROOT+ch.file)===file);
       const parts=['Projeto Finlândia', foundGroup?foundGroup.titlePt:'', foundItem?foundItem.titlePt:''].filter(Boolean);
       c.textContent=parts.join(' › ');
     }
@@ -126,7 +128,7 @@
           const html=marked.parse(txt);
           content.innerHTML=html;
         }
-      }catch(e){ content.innerHTML = `<p class="muted">Erro ao abrir o arquivo / Error: ${e.message}</p>`; }
+      }catch(e){ content.innerHTML = `<p class="muted">Erro ao abrir o arquivo / Error: ${e.message}<br><small>Path tried: ${file}</small></p>`; }
     }
 
     document.getElementById('q').addEventListener('input', (e)=>{
@@ -139,65 +141,3 @@
   </script>
 </body>
 </html>
-<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Viewer — Projeto Finlândia</title>
-  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
-  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-  <style>
-    :root{--bg:#0b1220;--panel:#0d1630;--card:#111a3b;--text:#e6ecff;--muted:#98a2b3;--accent:#7dd3fc;--accent2:#a78bfa}
-    html,body{height:100%}
-    body{margin:0;background:radial-gradient(1200px 700px at 20% -10%, #1b2a6b33, transparent),radial-gradient(900px 600px at 110% 10%, #6b21a833, transparent),var(--bg);color:var(--text);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;line-height:1.6}
-    header{position:sticky;top:0;background:linear-gradient(180deg, rgba(11,18,32,.95), rgba(11,18,32,.75));backdrop-filter:blur(8px);border-bottom:1px solid #203058;padding:12px 16px;z-index:10}
-    header .row{display:flex;gap:12px;align-items:center;max-width:1100px;margin:0 auto}
-    .badge{font-size:12px;color:#0b1220;background:linear-gradient(90deg, var(--accent), var(--accent2));padding:2px 8px;border-radius:999px}
-    .path{color:var(--muted);font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-    .container{max-width:1100px;margin:24px auto;padding:0 16px}
-    .panel{background:linear-gradient(180deg, #0d1630, #0b1220);border:1px solid #203058;border-radius:16px;box-shadow:0 10px 30px rgba(0,0,0,.35)}
-    .content{padding:24px}
-    .content h1,.content h2,.content h3{line-height:1.3}
-    .content h1{font-size:1.7rem;margin:0 0 12px}
-    .content h2{font-size:1.3rem;margin-top:22px}
-    .content h3{font-size:1.15rem;margin-top:18px}
-    .content a{color:#8ec5ff}
-    .content pre{background:#0e1836;border:1px solid #1f2d62;padding:12px;border-radius:10px;overflow:auto}
-    .content code{background:#0e1836;padding:.15rem .35rem;border-radius:.4rem}
-    .toolbar{display:flex;gap:8px;justify-content:space-between;align-items:center;padding:12px 16px;border-bottom:1px solid #203058}
-    .toolbar .left{display:flex;gap:8px;align-items:center}
-    .btn{background:#0f1b3c;border:1px solid #27407f;color:#cfe1ff;padding:8px 12px;border-radius:10px;cursor:pointer}
-    .btn:hover{border-color:#3c5db2}
-    .hint{color:#9fb0d6;font-size:12px}
-  </style>
-</head>
-<body>
-  <header>
-    <div class="row">
-      <span class="badge">Premium</span>
-      <div class="path" id="path">Loading…</div>
-    </div>
-  </header>
-  <div class="container">
-    <div class="panel">
-      <div class="toolbar">
-        <div class="left">
-          <button class="btn" onclick="goHome()">Home</button>
-          <button class="btn" onclick="openRaw()">Open raw</button>
-        </div>
-        <div class="hint">PT/EN — use este visualizador para qualquer .md</div>
-      </div>
-      <div class="content" id="content">Carregando… / Loading…</div>
-    </div>
-  </div>
-  <script>
-    function qs(k){return new URLSearchParams(location.search).get(k)}
-    const file = qs(file) || 00_INTRODUCTION/overview.md;
-    document.getElementById(path).textContent = `Viewing: ${file}`;
-    function goHome(){ location.href = index.html; }
-    function openRaw(){ window.open(file, _blank); }
-    async function load(){
-      try{
-        const res = await fetch(file, {cache:no-store});
-        if(!res.ok){ throw new Error(Failed
