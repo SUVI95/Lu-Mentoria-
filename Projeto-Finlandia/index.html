@@ -1,60 +1,167 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Projeto Finlândia / Finland Project</title>
-  <style>
-    body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial,sans-serif;line-height:1.5;margin:24px;max-width:900px}
-    h1{font-size:1.8rem;margin:0 0 8px}
-    h2{margin-top:24px}
-    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
-    .card{border:1px solid #e5e7eb;border-radius:12px;padding:16px;background:#fff}
-    a{color:#2563eb;text-decoration:none}
-    a:hover{text-decoration:underline}
-    .muted{color:#6b7280}
-  </style>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Projeto Finlândia / Finland Project</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg: radial-gradient(1200px 800px at 20% -10%, #2b59ff33 0%, transparent 70%),
+        radial-gradient(1000px 700px at 90% 10%, #ff6fd833 0%, transparent 70%),
+        linear-gradient(180deg, #0a0b10 0%, #111520 100%);
+  --fg: #eaf0ff;
+  --muted:#a8b3d2;
+  --accent1:#7aa2ff;
+  --accent2:#ff6fd8;
+  --accent3:#43e7ad;
+  --card-bg:#161a26cc;
+  --card-ring:#2c3144;
+  --radius:22px;
+  --shadow:0 12px 36px rgba(0,0,0,.4);
+}
+@media (prefers-color-scheme: light){
+  :root{
+    --bg: radial-gradient(1200px 800px at 20% -10%, #a8c4ff 0%, transparent 70%),
+          radial-gradient(1000px 700px at 90% 10%, #ffc1ee 0%, transparent 70%),
+          linear-gradient(180deg, #f2f5ff 0%, #f7f9ff 100%);
+    --fg:#0b0c14;
+    --muted:#55607a;
+    --card-bg:#ffffffcc;
+    --card-ring:#e6e8f3;
+  }
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;
+  font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
+  color:var(--fg);
+  background:var(--bg);
+  background-attachment:fixed;
+  overflow-x:hidden;
+}
+header{
+  position:sticky;top:0;z-index:40;
+  backdrop-filter:blur(10px) saturate(1.3);
+  background:rgba(12,14,20,.8);
+  border-bottom:1px solid var(--card-ring);
+}
+.header-inner{
+  max-width:1200px;margin:0 auto;padding:16px;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.title{font-weight:700;font-size:20px;letter-spacing:.3px}
+.subtitle{font-size:14px;color:var(--muted)}
+.lang{border:1px solid var(--card-ring);border-radius:999px;padding:6px 10px;font-size:12px;color:var(--muted);}
+main{max-width:1200px;margin:0 auto;padding:36px 18px 100px;}
+h1{font-size:32px;margin:0 0 8px;}
+h2{font-size:18px;margin:0 0 6px;}
+h3{margin:0 0 12px;font-size:14px;color:var(--muted)}
+.note{color:var(--muted);font-size:13px;margin-top:26px;text-align:center}
+.grid{display:grid;gap:22px;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));}
+.card{
+  position:relative;
+  border-radius:var(--radius);
+  border:1px solid var(--card-ring);
+  background:linear-gradient(160deg,rgba(255,255,255,.02),rgba(255,255,255,.05)),var(--card-bg);
+  box-shadow:var(--shadow);
+  padding:22px 22px 26px;
+  overflow:hidden;
+  transition:transform .3s cubic-bezier(.25,.46,.45,.94),box-shadow .3s,border-color .3s;
+}
+.card::before{
+  content:"";position:absolute;inset:-2px;
+  background:conic-gradient(from 180deg at 50% 50%,var(--accent1),var(--accent2),var(--accent3),var(--accent1));
+  opacity:.25;filter:blur(20px);
+  z-index:0;
+}
+.card:hover{
+  transform:translateY(-6px);
+  border-color:color-mix(in oklab,var(--card-ring),var(--accent1) 40%);
+  box-shadow:0 18px 60px rgba(0,0,0,.5);
+}
+.card h2,.card h3,.card ul{position:relative;z-index:1}
+.card ul{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:6px;}
+a{color:var(--accent1);text-decoration:none}
+a:hover{color:var(--accent2);text-decoration:underline;}
+.card h2 span{
+  background:linear-gradient(90deg,var(--accent1),var(--accent2),var(--accent3));
+  background-size:200% auto;
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  animation:shine 6s linear infinite;
+}
+@keyframes shine{to{background-position:200% center;}}
+.shape{ position:absolute;inset:0;z-index:0;overflow:hidden;pointer-events:none; }
+.shape span{ position:absolute;width:200px;height:200px;border-radius:50%; background:radial-gradient(circle at center,var(--accent2)33%,transparent 70%); opacity:.08;animation:float 30s ease-in-out infinite; }
+.shape span:nth-child(2){top:50%;left:80%;animation-delay:-8s;background:radial-gradient(circle,var(--accent1)33%,transparent 70%);} 
+.shape span:nth-child(3){top:120%;left:10%;animation-delay:-12s;background:radial-gradient(circle,var(--accent3)33%,transparent 70%);} 
+@keyframes float{ 0%,100%{transform:translateY(0);} 50%{transform:translateY(-40px) translateX(20px);} }
+</style>
 </head>
 <body>
-  <h1>Projeto Finlândia / Finland Project</h1>
-  <p class="muted">PT: Programa prático, bilíngue para integração à Finlândia. · EN: Practical, bilingual program for Finland integration.</p>
-  <div class="grid">
-    <div class="card">
-      <h2>00 — Introdução / Introduction</h2>
-      <ul>
-        <li><a href="00_INTRODUCTION/overview.md">Visão Geral / Overview</a></li>
-        <li><a href="00_INTRODUCTION/how_to_use_this_training.md">Como Usar / How to Use</a></li>
-        <li><a href="00_INTRODUCTION/learning_path.md">Trilha / Learning Path</a></li>
-      </ul>
+<header>
+  <div class="header-inner">
+    <div>
+      <div class="title">Projeto Finlândia / Finland Project</div>
+      <div class="subtitle">PT: Programa prático, bilíngue · EN: Practical bilingual program for Finland integration</div>
     </div>
-    <div class="card">
-      <h2>01 — Idioma / Language</h2>
-      <ul>
-        <li><a href="01_LANGUAGE/activities/week1_language_challenge.md">Semana 1</a></li>
-        <li><a href="01_LANGUAGE/activities/week2_translation_practice.md">Semana 2</a></li>
-        <li><a href="01_LANGUAGE/activities/">Semanas 3–12</a></li>
-        <li><a href="01_LANGUAGE/finnish_vocabulary.csv">Vocabulário (CSV)</a></li>
-      </ul>
-    </div>
-    <div class="card">
-      <h2>02 — Carreira na Finlândia / Career in Finland</h2>
-      <ul>
-        <li><a href="02_CAREER_FINLAND/activities/job_application_exercise.md">Candidatura / Application</a></li>
-        <li><a href="02_CAREER_FINLAND/activities/mock_interview_script.md">Entrevista / Interview</a></li>
-        <li><a href="02_CAREER_FINLAND/activities/linkedin_update_task.md">LinkedIn</a></li>
-        <li><a href="02_CAREER_FINLAND/activities/networking_outreach_task.md">Networking</a></li>
-        <li><a href="02_CAREER_FINLAND/activities/salary_research_task.md">Pesquisa Salarial</a></li>
-        <li><a href="02_CAREER_FINLAND/activities/finnish_cv_workshop.md">Oficina CV</a></li>
-      </ul>
-    </div>
-    <div class="card">
-      <h2>05 — Projetos / Projects</h2>
-      <ul>
-        <li><a href="05_PROJECTS/templates/weekly_report.md">Weekly Report</a></li>
-        <li><a href="05_PROJECTS/templates/project_template.md">Project Template</a></li>
-        <li><a href="05_PROJECTS/templates/reflection_log.md">Reflection Log</a></li>
-      </ul>
-    </div>
+    <div class="lang">PT · EN</div>
   </div>
+</header>
+
+<main>
+  <div class="shape"><span></span><span></span><span></span></div>
+  <h1>🌍 Comece a Trilha / Start the Journey</h1>
+
+  <section class="grid">
+    <div class="card">
+      <h2><span>00 — Introdução / Introduction</span></h2>
+      <h3>Comece aqui · Start here</h3>
+      <ul>
+        <li><a href="viewer.html?file=00_INTRODUCTION/overview.md">Visão Geral / Overview</a></li>
+        <li><a href="viewer.html?file=00_INTRODUCTION/how_to_use_this_training.md">Como Usar / How to Use</a></li>
+        <li><a href="viewer.html?file=00_INTRODUCTION/learning_path.md">Trilha / Learning Path</a></li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h2><span>01 — Idioma / Language</span></h2>
+      <h3>PT→EN→FI · Aulas + tarefas</h3>
+      <ul>
+        <li><a href="viewer.html?file=01_LANGUAGE/activities/week1_language_challenge.md">Semana 1</a></li>
+        <li><a href="viewer.html?file=01_LANGUAGE/activities/week2_translation_practice.md">Semana 2</a></li>
+        <li><a href="viewer.html?file=01_LANGUAGE/activities/week3_module.md">Semanas 3–12</a></li>
+        <li><a href="viewer.html?file=01_LANGUAGE/finnish_vocabulary.csv">Vocabulário (CSV)</a></li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h2><span>02 — Carreira na Finlândia / Career in Finland</span></h2>
+      <h3>CV, entrevista, networking</h3>
+      <ul>
+        <li><a href="viewer.html?file=02_CAREER_FINLAND/activities/job_application_exercise.md">Candidatura / Application</a></li>
+        <li><a href="viewer.html?file=02_CAREER_FINLAND/activities/mock_interview_script.md">Entrevista / Interview</a></li>
+        <li><a href="viewer.html?file=02_CAREER_FINLAND/activities/linkedin_update_task.md">LinkedIn</a></li>
+        <li><a href="viewer.html?file=02_CAREER_FINLAND/activities/networking_outreach_task.md">Networking</a></li>
+        <li><a href="viewer.html?file=02_CAREER_FINLAND/activities/salary_research_task.md">Pesquisa Salarial</a></li>
+        <li><a href="viewer.html?file=02_CAREER_FINLAND/activities/finnish_cv_workshop.md">Oficina CV</a></li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h2><span>05 — Projetos / Projects</span></h2>
+      <h3>Entregas semanais e portfólio</h3>
+      <ul>
+        <li><a href="viewer.html?file=05_PROJECTS/templates/weekly_report.md">Weekly Report</a></li>
+        <li><a href="viewer.html?file=05_PROJECTS/templates/project_template.md">Project Template</a></li>
+        <li><a href="viewer.html?file=05_PROJECTS/templates/reflection_log.md">Reflection Log</a></li>
+      </ul>
+    </div>
+  </section>
+
+  <p class="note">✨ Explore, aprenda e construa sua jornada para a Finlândia. / Explore, learn, and build your Finland journey.</p>
+</main>
 </body>
 </html>
