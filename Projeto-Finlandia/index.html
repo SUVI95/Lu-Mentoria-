@@ -7,28 +7,27 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg: radial-gradient(1200px 800px at 20% -10%, #2b59ff33 0%, transparent 70%),
-        radial-gradient(1000px 700px at 90% 10%, #ff6fd833 0%, transparent 70%),
-        linear-gradient(180deg, #0a0b10 0%, #111520 100%);
-  --fg: #eaf0ff;
-  --muted:#a8b3d2;
-  --accent1:#7aa2ff;
-  --accent2:#ff6fd8;
-  --accent3:#43e7ad;
-  --card-bg:#161a26cc;
-  --card-ring:#2c3144;
+  --bg: #ffffff;
+  --fg: #0b0c14;
+  --muted:#55607a;
+  --accent1:#2563eb;
+  --accent2:#7c3aed;
+  --accent3:#059669;
+  --card-bg:#ffffff;
+  --card-ring:#e6e8f3;
   --radius:22px;
-  --shadow:0 12px 36px rgba(0,0,0,.4);
+  --shadow:0 8px 24px rgba(0,0,0,.06);
 }
-@media (prefers-color-scheme: light){
+@media (prefers-color-scheme: dark){
   :root{
-    --bg: radial-gradient(1200px 800px at 20% -10%, #a8c4ff 0%, transparent 70%),
-          radial-gradient(1000px 700px at 90% 10%, #ffc1ee 0%, transparent 70%),
-          linear-gradient(180deg, #f2f5ff 0%, #f7f9ff 100%);
-    --fg:#0b0c14;
-    --muted:#55607a;
-    --card-bg:#ffffffcc;
-    --card-ring:#e6e8f3;
+    --bg: radial-gradient(1200px 800px at 20% -10%, #2b59ff33 0%, transparent 70%),
+          radial-gradient(1000px 700px at 90% 10%, #ff6fd833 0%, transparent 70%),
+          linear-gradient(180deg, #0a0b10 0%, #111520 100%);
+    --fg: #eaf0ff;
+    --muted:#a8b3d2;
+    --card-bg:#161a26cc;
+    --card-ring:#2c3144;
+    --shadow:0 12px 36px rgba(0,0,0,.4);
   }
 }
 *{box-sizing:border-box}
@@ -38,13 +37,13 @@ body{
   font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
   color:var(--fg);
   background:var(--bg);
-  background-attachment:fixed;
+  background-attachment:scroll;
   overflow-x:hidden;
 }
 header{
   position:sticky;top:0;z-index:40;
-  backdrop-filter:blur(10px) saturate(1.3);
-  background:rgba(12,14,20,.8);
+  backdrop-filter:blur(10px) saturate(1.2);
+  background:rgba(255,255,255,.8);
   border-bottom:1px solid var(--card-ring);
 }
 .header-inner{
@@ -52,7 +51,7 @@ header{
   display:flex;align-items:center;justify-content:space-between;
 }
 .title{font-weight:700;font-size:20px;letter-spacing:.3px;color:#f7f9ff}
-.subtitle{font-size:14px;color:#cfe1ff}
+.subtitle{font-size:14px;color:#55607a}
 .lang{border:1px solid var(--card-ring);border-radius:999px;padding:6px 10px;font-size:12px;color:var(--muted);}
 main{max-width:1200px;margin:0 auto;padding:36px 18px 100px;}
 h1{font-size:32px;margin:0 0 8px;}
@@ -64,7 +63,7 @@ h3{margin:0 0 12px;font-size:14px;color:var(--muted)}
   position:relative;
   border-radius:var(--radius);
   border:1px solid var(--card-ring);
-  background:linear-gradient(160deg,rgba(255,255,255,.02),rgba(255,255,255,.05)),var(--card-bg);
+  background:var(--card-bg);
   box-shadow:var(--shadow);
   padding:22px 22px 26px;
   overflow:hidden;
@@ -78,8 +77,8 @@ h3{margin:0 0 12px;font-size:14px;color:var(--muted)}
 }
 .card:hover{
   transform:translateY(-6px);
-  border-color:color-mix(in oklab,var(--card-ring),var(--accent1) 40%);
-  box-shadow:0 18px 60px rgba(0,0,0,.5);
+  border-color:color-mix(in oklab,var(--card-ring),var(--accent1) 30%);
+  box-shadow:0 18px 50px rgba(0,0,0,.10);
 }
 .card h2,.card h3,.card ul{position:relative;z-index:1}
 .card ul{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:6px;}
@@ -123,6 +122,7 @@ a:hover{color:var(--accent2);text-decoration:underline;}
         <li><a href="/Projeto-Finlandia/semana-1.html">Semana 1</a></li>
         <li><a href="/Projeto-Finlandia/semana-2.html">Semana 2</a></li>
         <li><a href="/Projeto-Finlandia/semanas-3-12.html">Semanas 3–12</a></li>
+        <li><a href="/Projeto-Finlandia/vocabulario.html">Vocabulário (Semanas 1–2)</a></li>
         <li><a href="/Projeto-Finlandia/viewer.html?file=01_LANGUAGE/finnish_vocabulary.csv">Vocabulário (CSV)</a></li>
       </ul>
     </div>
